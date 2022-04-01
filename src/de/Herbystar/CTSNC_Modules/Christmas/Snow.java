@@ -40,10 +40,12 @@ public class Snow extends BukkitRunnable {
 			}
 		}
 		if(Files.cm.getBoolean("WaterToSnow") == true) {
-			Block block = player.getLocation().getBlock(); 
+			Location pLoc = player.getLocation();
+			Block block = pLoc.getBlock();
+			Block blockBelow = new Location(player.getWorld(), pLoc.getX(), pLoc.getY() - 1.0, pLoc.getZ()).getBlock();
 			if(!block.getType().isSolid()) {
-				if(block.isLiquid()) {
-					block.setType(Material.ICE);
+				if(blockBelow.isLiquid()) {
+					blockBelow.setType(Material.ICE);
 				} else {
 					block.setType(Material.SNOW);
 				}
