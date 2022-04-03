@@ -13,6 +13,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BannerMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
+import de.Herbystar.CTSNC_Modules.Christmas.Utilities.XMaterial;
+
 public class Christmas {
 	
 	private static Map<Player, Snow> snows;
@@ -34,21 +36,30 @@ public class Christmas {
 	}
 
 	
+	@SuppressWarnings("deprecation")
 	public static void setSantaHead(Player player) {
-		ItemStack s = new ItemStack(Material.SKULL_ITEM, 1, (short)3);
-	    SkullMeta m = (SkullMeta)Bukkit.getItemFactory().getItemMeta(Material.SKULL_ITEM);
-	    m.setOwner("Santa");
+		ItemStack s = XMaterial.PLAYER_HEAD.parseItem();
+	    SkullMeta m = (SkullMeta)Bukkit.getItemFactory().getItemMeta(XMaterial.PLAYER_HEAD.parseMaterial());
+	    try {
+		    m.setOwningPlayer(Bukkit.getOfflinePlayer("Santa"));
+	    } catch(NoSuchMethodError ex) {
+	    	m.setOwner("Santa");
+	    }
 	    m.setDisplayName("§4§lSanta");
-	    s.setItemMeta(m);	
+	    s.setItemMeta(m);
 	    player.getInventory().setHelmet(s);
 	}
 	
 	@SuppressWarnings("deprecation")
 	public static void setChristmasBanner(Player player) {
-		ItemStack b = new ItemStack(Material.BANNER);
+		Material mat = XMaterial.BLACK_BANNER.parseMaterial();
+		if(!XMaterial.isNewVersion()) {
+			mat = Material.valueOf("BANNER");
+		}
+		ItemStack b = new ItemStack(mat);
 		BannerMeta m = (BannerMeta) b.getItemMeta();
-		m.setBaseColor(DyeColor.BLACK);
 		m.setDisplayName("§6§lChristmas Tree");
+		m.setBaseColor(DyeColor.BLACK);
 		m.addPattern(new Pattern(DyeColor.BROWN, PatternType.STRIPE_CENTER));
 		m.addPattern(new Pattern(DyeColor.GREEN, PatternType.TRIANGLE_TOP));
 		m.addPattern(new Pattern(DyeColor.GREEN, PatternType.HALF_HORIZONTAL));
@@ -60,6 +71,7 @@ public class Christmas {
 		m.addPattern(new Pattern(DyeColor.GREEN, PatternType.CREEPER));
 		m.addPattern(new Pattern(DyeColor.GREEN, PatternType.SKULL));
 		b.setItemMeta(m);
+		
 		player.getInventory().setHelmet(b);
 	}
 
